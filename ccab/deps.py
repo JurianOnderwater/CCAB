@@ -14,7 +14,23 @@ def _has_pillow() -> bool:
 
 
 def _has_swift() -> bool:
-    return platform.system() == "Darwin" and shutil.which("swift") is not None
+    if platform.system() != "Darwin" or shutil.which("swift") is None:
+        return False
+    # Avoid triggering macOS's Xcode CLT install popup on /usr/bin/swift stubs
+    res = subprocess.run(["xcode-select", "-p"], capture_output=True)
+    return res.returncode == 0
+
+
+def _find_ffmpeg() -> str | None:
+    system_bin = shutil.which("ffmpeg")
+    if system_bin:
+        return system_bin
+    try:
+        import imageio_ffmpeg
+
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        return None
 
 
 def check_deps() -> dict[str, str | None]:
@@ -26,7 +42,7 @@ def check_deps() -> dict[str, str | None]:
         renderer = "pillow" if _has_pillow() else None
 
     return {
-        "ffmpeg": shutil.which("ffmpeg"),
+        "ffmpeg": _find_ffmpeg(),
         "ffprobe": shutil.which("ffprobe"),
         "renderer": renderer,
     }
@@ -36,13 +52,13 @@ def _install_ffmpeg() -> None:
     system = platform.system()
     if system == "Darwin":
         brew = shutil.which("brew")
-        if not brew:
-            raise RuntimeError(
-                "ffmpeg is not installed and Homebrew was not found. "
-                "Install Homebrew (https://brew.sh) or install ffmpeg manually."
-            )
-        print("[DEPS] Installing ffmpeg via Homebrew...")
-        subprocess.run([brew, "install", "ffmpeg"], check=True)
+        if brew:
+            print("[DEPS] Installing ffmpeg via Homebrew...")
+            subprocess.run([brew, "install", "ffmpeg"], check=True)
+            return
+        print("[DEPS] Installing bundled static ffmpeg via imageio-ffmpeg (no Xcode CLT required)...")
+        subprocess.run([sys.executable, "-m", "pip", "install", "imageio-ffmpeg>=0.5"], check=True)
+        return
     elif system == "Linux":
         if shutil.which("apt-get"):
             print("[DEPS] Installing ffmpeg via apt-get...")
@@ -81,15 +97,15 @@ def ensure_deps(auto_install: bool = True) -> dict[str, str]:
     """Verify required tools exist, optionally installing missing dependencies automatically."""
     status = check_deps()
 
-    if not status["ffmpeg"] or not status["ffprobe"]:
+    if not status["ffmpeg"]:
         if not auto_install:
             raise RuntimeError(
-                "Missing ffmpeg/ffprobe. Install ffmpeg or re-run without --no-auto-install."
+                "Missing ffmpeg. Install ffmpeg or re-run without --no-auto-install."
             )
         _install_ffmpeg()
         status = check_deps()
-        if not status["ffmpeg"] or not status["ffprobe"]:
-            raise RuntimeError("ffmpeg/ffprobe still not found on PATH after installation.")
+        if not status["ffmpeg"]:
+            raise RuntimeError("ffmpeg still not found after installation.")
 
     if not status["renderer"]:
         if platform.system() == "Darwin":

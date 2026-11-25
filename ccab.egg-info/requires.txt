@@ -1,3 +1,0 @@
-
-[pillow]
-pillow>=10.0

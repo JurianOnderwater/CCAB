@@ -1,0 +1,19 @@
+# Media, captions, and burned outputs
+Video/
+Captions/
+Output/
+
+# Python caches & packaging artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# OS & editor files
+.DS_Store
+Thumbs.db

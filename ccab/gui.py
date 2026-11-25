@@ -70,10 +70,13 @@ def _safe_filename(name: str) -> str:
 
 
 def _extract_poster(video_path: Path, poster_path: Path) -> bool:
+    from ccab.deps import check_deps
+
+    ffmpeg_bin = check_deps().get("ffmpeg") or "ffmpeg"
     for ts in ("5.0", "0.0"):
         subprocess.run(
             [
-                "ffmpeg",
+                ffmpeg_bin,
                 "-y",
                 "-ss",
                 ts,

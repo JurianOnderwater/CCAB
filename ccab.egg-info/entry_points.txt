@@ -1,3 +1,0 @@
-[console_scripts]
-ccab = ccab.cli:main
-ccab-gui = ccab.gui:main

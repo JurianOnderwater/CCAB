@@ -537,27 +537,39 @@ def render_cues_pillow(
 
 
 def probe_video_dimensions(video_path: Path) -> tuple[int, int]:
-    """Return (width, height) of the primary video stream."""
-    res = subprocess.run(
-        [
-            "ffprobe",
-            "-v",
-            "error",
-            "-select_streams",
-            "v:0",
-            "-show_entries",
-            "stream=width,height",
-            "-of",
-            "json",
-            str(video_path),
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    info = json.loads(res.stdout)
-    stream = info["streams"][0]
-    return int(stream["width"]), int(stream["height"])
+    """Return (width, height) of the primary video stream using ffprobe or ffmpeg fallback."""
+    from ccab.deps import check_deps
+
+    deps = check_deps()
+    ffprobe = deps.get("ffprobe")
+    if ffprobe:
+        res = subprocess.run(
+            [
+                ffprobe,
+                "-v",
+                "error",
+                "-select_streams",
+                "v:0",
+                "-show_entries",
+                "stream=width,height",
+                "-of",
+                "json",
+                str(video_path),
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        info = json.loads(res.stdout)
+        stream = info["streams"][0]
+        return int(stream["width"]), int(stream["height"])
+
+    ffmpeg = deps.get("ffmpeg") or "ffmpeg"
+    res = subprocess.run([ffmpeg, "-i", str(video_path)], capture_output=True, text=True)
+    m = re.search(r"Video:.*?,\s*(\d{2,5})x(\d{2,5})\b", res.stderr)
+    if not m:
+        raise RuntimeError(f"Could not determine video dimensions for {video_path}")
+    return int(m.group(1)), int(m.group(2))
 
 
 def _render_pngs(
@@ -600,7 +612,10 @@ def burn_video(
             )
             prev_label = out_label
 
-        cmd = ["ffmpeg", "-y", "-i", str(video_path)]
+        from ccab.deps import check_deps
+
+        ffmpeg_bin = check_deps().get("ffmpeg") or "ffmpeg"
+        cmd = [ffmpeg_bin, "-y", "-i", str(video_path)]
         for png_path in png_paths:
             cmd.extend(["-i", str(png_path)])
         cmd.extend(
@@ -648,11 +663,14 @@ def render_preview_frame(
     )
 
     with tempfile.TemporaryDirectory() as tmp:
+        from ccab.deps import check_deps
+
+        ffmpeg_bin = check_deps().get("ffmpeg") or "ffmpeg"
         tmp_dir = Path(tmp)
         png_paths = _render_pngs(width, height, [selected_cue], style, renderer, tmp_dir)
         subprocess.run(
             [
-                "ffmpeg",
+                ffmpeg_bin,
                 "-y",
                 "-ss",
                 f"{timestamp:.3f}",

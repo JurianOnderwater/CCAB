@@ -6,14 +6,15 @@ cd "$SCRIPT_DIR"
 
 echo "==> Checking system dependencies (ffmpeg)..."
 OS="$(uname -s)"
-if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+EXTRA=""
+if ! command -v ffmpeg >/dev/null 2>&1; then
   if [[ "$OS" == "Darwin" ]]; then
     if command -v brew >/dev/null 2>&1; then
       echo "==> Installing ffmpeg via Homebrew..."
       brew install ffmpeg
     else
-      echo "ERROR: ffmpeg is missing and Homebrew was not found. Install Homebrew from https://brew.sh first." >&2
-      exit 1
+      echo "==> Homebrew not found; bundling prebuilt static ffmpeg (no Xcode CLT required)..."
+      EXTRA="[static-ffmpeg]"
     fi
   elif [[ "$OS" == "Linux" ]]; then
     if command -v apt-get >/dev/null 2>&1; then
@@ -23,21 +24,16 @@ if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; 
     elif command -v pacman >/dev/null 2>&1; then
       sudo pacman -S --noconfirm ffmpeg
     else
-      echo "ERROR: Please install ffmpeg using your Linux package manager." >&2
-      exit 1
+      EXTRA="[static-ffmpeg]"
     fi
   else
-    echo "ERROR: Please install ffmpeg manually for $OS." >&2
-    exit 1
+    EXTRA="[static-ffmpeg]"
   fi
 else
   echo "    ffmpeg already installed: $(command -v ffmpeg)"
 fi
 
-TARGET="."
-if [[ "$OS" != "Darwin" ]]; then
-  TARGET=".[pillow]"
-fi
+TARGET=".${EXTRA}"
 
 echo "==> Installing ccab CLI..."
 if command -v uv >/dev/null 2>&1; then
