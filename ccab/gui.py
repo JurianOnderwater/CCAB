@@ -129,6 +129,14 @@ def _style_from_payload(payload: dict[str, object]) -> CaptionStyle:
     return build_style(preset, overrides)
 
 
+def _default_work_dir() -> Path:
+    """Return a writable base directory for Output/Captions (Finder .app launches with cwd='/')."""
+    cwd = Path.cwd()
+    if getattr(sys, "frozen", False) or str(cwd) == "/" or not os.access(cwd, os.W_OK):
+        return Path.home() / "Downloads" / "CCAB"
+    return cwd
+
+
 def _parse_cues_payload(raw_cues: object) -> list[tuple[float, float, str]] | None:
     """Validate an optional JSON cues array from the timeline editor."""
     if not isinstance(raw_cues, list) or not raw_cues:
@@ -540,8 +548,9 @@ def _make_handler(state: GuiState):
                 self._send_json(HTTPStatus.BAD_REQUEST, {"error": "Please drop a subtitle file."})
                 return
 
-            output_dir = Path(out_dir_raw).expanduser() if out_dir_raw else (Path.cwd() / "Output")
-            captions_dir = Path.cwd() / "Captions"
+            base_dir = _default_work_dir()
+            output_dir = Path(out_dir_raw).expanduser() if out_dir_raw else (base_dir / "Output")
+            captions_dir = base_dir / "Captions"
             output_dir.mkdir(parents=True, exist_ok=True)
             captions_dir.mkdir(parents=True, exist_ok=True)
 
@@ -583,7 +592,7 @@ def _make_handler(state: GuiState):
                         state.jobs[job_id].update(
                             {
                                 "status": "done",
-                                "message": f"Saved {output_video.name} and {output_srt.name}.",
+                                "message": f"Saved to {output_video} and {output_srt}.",
                                 "download_video": f"/api/download/{job_id}/video",
                                 "download_srt": f"/api/download/{job_id}/srt",
                             }
