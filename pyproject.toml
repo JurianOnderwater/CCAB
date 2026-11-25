@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ccab"
+version = "0.1.0"
+description = "Match, convert, and burn styled captions into videos."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+pillow = ["pillow>=10.0"]
+
+[project.scripts]
+ccab = "ccab.cli:main"
+ccab-gui = "ccab.gui:main"
+
+[tool.setuptools.packages.find]
+include = ["ccab*"]
+
+[tool.setuptools.package-data]
+ccab = ["static/*"]
