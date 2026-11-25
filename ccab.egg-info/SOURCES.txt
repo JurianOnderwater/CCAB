@@ -12,4 +12,9 @@ ccab.egg-info/dependency_links.txt
 ccab.egg-info/entry_points.txt
 ccab.egg-info/requires.txt
 ccab.egg-info/top_level.txt
+ccab/static/icon-192.png
+ccab/static/icon-512.png
+ccab/static/icon.svg
 ccab/static/index.html
+ccab/static/manifest.webmanifest
+ccab/static/sw.js

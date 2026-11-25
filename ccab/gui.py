@@ -6,9 +6,13 @@ import argparse
 import atexit
 import json
 import mimetypes
+import os
+import platform
+import plistlib
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import threading
 import urllib.parse
@@ -30,7 +34,15 @@ from ccab.render import (
     render_preview_frame,
 )
 
-STATIC_HTML = Path(__file__).resolve().parent / "static" / "index.html"
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+STATIC_HTML = STATIC_DIR / "index.html"
+STATIC_ASSETS: dict[str, tuple[str, str]] = {
+    "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
+    "/sw.js": ("sw.js", "application/javascript; charset=utf-8"),
+    "/icon.svg": ("icon.svg", "image/svg+xml"),
+    "/icon-192.png": ("icon-192.png", "image/png"),
+    "/icon-512.png": ("icon-512.png", "image/png"),
+}
 
 
 class GuiState:
@@ -149,6 +161,25 @@ def _make_handler(state: GuiState):
             if path == "/" or path == "/index.html":
                 html_bytes = STATIC_HTML.read_bytes()
                 self._send_bytes(HTTPStatus.OK, "text/html; charset=utf-8", html_bytes)
+                return
+
+            if path in STATIC_ASSETS:
+                filename, content_type = STATIC_ASSETS[path]
+                asset_path = STATIC_DIR / filename
+                if not asset_path.is_file():
+                    self._send_json(HTTPStatus.NOT_FOUND, {"error": "Asset not found"})
+                    return
+                body = asset_path.read_bytes()
+                self.send_response(HTTPStatus.OK)
+                self.send_header("Content-Type", content_type)
+                self.send_header("Content-Length", str(len(body)))
+                if path == "/sw.js":
+                    self.send_header("Service-Worker-Allowed", "/")
+                    self.send_header("Cache-Control", "no-cache")
+                else:
+                    self.send_header("Cache-Control", "public, max-age=3600")
+                self.end_headers()
+                self.wfile.write(body)
                 return
 
             if path == "/api/presets":
@@ -452,11 +483,57 @@ def launch_gui(port: int = 8765, open_browser: bool = True) -> None:
         state.cleanup()
 
 
+def install_launch_agent(port: int = 8765) -> Path:
+    """Install and start a macOS LaunchAgent so the installed PWA always has its local backend."""
+    if platform.system() != "Darwin":
+        raise RuntimeError("--install-service is currently supported on macOS only.")
+
+    agents_dir = Path.home() / "Library" / "LaunchAgents"
+    agents_dir.mkdir(parents=True, exist_ok=True)
+    plist_path = agents_dir / "com.ccab.studio.plist"
+    log_path = Path.home() / "Library" / "Logs" / "ccab-studio.log"
+
+    ccab_gui_bin = shutil.which("ccab-gui")
+    if ccab_gui_bin:
+        prog_args = [ccab_gui_bin, "--no-browser", "--port", str(port)]
+    else:
+        prog_args = [sys.executable, "-m", "ccab.gui", "--no-browser", "--port", str(port)]
+
+    plist_data = {
+        "Label": "com.ccab.studio",
+        "ProgramArguments": prog_args,
+        "RunAtLoad": True,
+        "KeepAlive": True,
+        "WorkingDirectory": str(Path.cwd()),
+        "StandardOutPath": str(log_path),
+        "StandardErrorPath": str(log_path),
+        "EnvironmentVariables": {
+            "PATH": os.environ.get("PATH", "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"),
+        },
+    }
+    plist_path.write_bytes(plistlib.dumps(plist_data))
+
+    domain = f"gui/{os.getuid()}"
+    subprocess.run(["launchctl", "bootout", f"{domain}/com.ccab.studio"], capture_output=True)
+    subprocess.run(["launchctl", "bootstrap", domain, str(plist_path)], check=True)
+    print(f"[OK] Installed LaunchAgent: {plist_path}")
+    print(f"[OK] CCAB Studio running in background at http://127.0.0.1:{port}/")
+    return plist_path
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="ccab-gui", description="Launch the CCAB Studio drag-and-drop GUI.")
     parser.add_argument("--port", type=int, default=8765, help="Local port to bind (default: 8765)")
     parser.add_argument("--no-browser", action="store_true", help="Do not open the browser automatically")
+    parser.add_argument(
+        "--install-service",
+        action="store_true",
+        help="Install a macOS background LaunchAgent so the installed PWA icon works anytime",
+    )
     args = parser.parse_args(argv)
+    if args.install_service:
+        install_launch_agent(port=args.port)
+        return
     launch_gui(port=args.port, open_browser=not args.no_browser)
 
 

@@ -28,7 +28,7 @@ ccab --install-deps
 
 ## Quick Start
 
-### Drag-and-Drop GUI
+### Drag-and-Drop GUI & Installable PWA
 
 Launch the local studio interface to drag and drop a video and subtitle file into designated cards, tweak colors/backgrounds with an instant live preview, and convert + burn in one click:
 
@@ -37,6 +37,15 @@ ccab --gui
 # or
 ccab-gui
 ```
+
+**Install as a desktop app (PWA) with an app icon:**
+1. Optionally register the background service on macOS so clicking the app icon works anytime without opening a terminal:
+   ```sh
+   ccab-gui --install-service
+   ```
+2. Open `http://127.0.0.1:8765` in Chrome, Edge, or Safari:
+   - **Chrome / Edge**: Click the **Install App** button in the header (or the install icon in the address bar).
+   - **Safari (macOS)**: Choose **File → Add to Dock…** to save CCAB Studio as a standalone Dock app.
 
 ### CLI Batch Mode
 
