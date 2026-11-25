@@ -36,12 +36,22 @@ fi
 TARGET=".${EXTRA}"
 
 echo "==> Installing ccab CLI..."
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+if ! command -v uv >/dev/null 2>&1 && ! command -v pipx >/dev/null 2>&1; then
+  if command -v curl >/dev/null 2>&1; then
+    echo "==> Installing uv (standalone Python package manager)..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+  fi
+fi
+
 if command -v uv >/dev/null 2>&1; then
   uv tool install --force --editable "$TARGET"
 elif command -v pipx >/dev/null 2>&1; then
   pipx install --force -e "$TARGET"
 else
-  python3 -m pip install --user -e "$TARGET"
+  python3 -m pip install --user --upgrade pip
+  python3 -m pip install --user "$TARGET"
 fi
 
 echo "==> Verifying ccab installation..."
