@@ -96,6 +96,32 @@ def _ts_to_seconds(h: str, m: str, s: str, ms: str) -> float:
     return int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
 
 
+def seconds_to_srt_ts(seconds: float) -> str:
+    """Format a non-negative float timestamp in seconds as HH:MM:SS,mmm."""
+    total_ms = max(0, int(round(float(seconds) * 1000.0)))
+    hours, rem = divmod(total_ms, 3_600_000)
+    minutes, rem = divmod(rem, 60_000)
+    secs, ms = divmod(rem, 1000)
+    return f"{hours:02d}:{minutes:02d}:{secs:02d},{ms:03d}"
+
+
+def write_srt(cues: list[tuple[float, float, str]], srt_path: Path) -> None:
+    """Serialize (start_seconds, end_seconds, text) cues to a valid UTF-8 .srt file."""
+    ordered = sorted(cues, key=lambda c: (c[0], c[1]))
+    blocks: list[str] = []
+    for start, end, text in ordered:
+        cleaned = clean_text(text).strip()
+        if not cleaned:
+            continue
+        start_s = max(0.0, float(start))
+        end_s = max(start_s + 0.05, float(end))
+        idx = len(blocks) + 1
+        blocks.append(f"{idx}\n{seconds_to_srt_ts(start_s)} --> {seconds_to_srt_ts(end_s)}\n{cleaned}")
+    if not blocks:
+        raise ValueError("Cannot write .srt: no valid cues provided.")
+    srt_path.write_text("\n\n".join(blocks) + "\n", encoding="utf-8")
+
+
 def parse_srt(srt_path: Path) -> list[tuple[float, float, str]]:
     """Parse an .srt file into (start_seconds, end_seconds, text) tuples."""
     content = clean_text(srt_path.read_text(encoding="utf-8-sig"))

@@ -1,4 +1,4 @@
-const CACHE_NAME = "ccab-studio-v1";
+const CACHE_NAME = "ccab-studio-v2";
 const PRECACHE_URLS = [
   "/",
   "/manifest.webmanifest",

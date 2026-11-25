@@ -536,8 +536,8 @@ def render_cues_pillow(
     return png_paths
 
 
-def probe_video_dimensions(video_path: Path) -> tuple[int, int]:
-    """Return (width, height) of the primary video stream using ffprobe or ffmpeg fallback."""
+def probe_video_metadata(video_path: Path) -> tuple[int, int, float]:
+    """Return (width, height, duration_seconds) using ffprobe or ffmpeg stderr fallback."""
     from ccab.deps import check_deps
 
     deps = check_deps()
@@ -551,7 +551,7 @@ def probe_video_dimensions(video_path: Path) -> tuple[int, int]:
                 "-select_streams",
                 "v:0",
                 "-show_entries",
-                "stream=width,height",
+                "stream=width,height:format=duration",
                 "-of",
                 "json",
                 str(video_path),
@@ -562,14 +562,84 @@ def probe_video_dimensions(video_path: Path) -> tuple[int, int]:
         )
         info = json.loads(res.stdout)
         stream = info["streams"][0]
-        return int(stream["width"]), int(stream["height"])
+        duration = float(info.get("format", {}).get("duration") or 0.0)
+        return int(stream["width"]), int(stream["height"]), duration
 
     ffmpeg = deps.get("ffmpeg") or "ffmpeg"
     res = subprocess.run([ffmpeg, "-i", str(video_path)], capture_output=True, text=True)
     m = re.search(r"Video:.*?,\s*(\d{2,5})x(\d{2,5})\b", res.stderr)
     if not m:
         raise RuntimeError(f"Could not determine video dimensions for {video_path}")
-    return int(m.group(1)), int(m.group(2))
+    dur_m = re.search(r"Duration:\s*(\d+):(\d{2}):(\d{2}(?:\.\d+)?)", res.stderr)
+    duration = (
+        int(dur_m.group(1)) * 3600 + int(dur_m.group(2)) * 60 + float(dur_m.group(3))
+        if dur_m
+        else 0.0
+    )
+    return int(m.group(1)), int(m.group(2)), duration
+
+
+def probe_video_dimensions(video_path: Path) -> tuple[int, int]:
+    """Return (width, height) of the primary video stream using ffprobe or ffmpeg fallback."""
+    width, height, _ = probe_video_metadata(video_path)
+    return width, height
+
+
+def extract_waveform_peaks(video_path: Path, buckets: int = 1200) -> list[float]:
+    """Extract normalized mono audio peak amplitudes (0.0..1.0) using ffmpeg."""
+    import array
+    import sys
+
+    from ccab.deps import check_deps
+
+    ffmpeg = check_deps().get("ffmpeg") or "ffmpeg"
+    res = subprocess.run(
+        [
+            ffmpeg,
+            "-v",
+            "error",
+            "-i",
+            str(video_path),
+            "-vn",
+            "-ac",
+            "1",
+            "-ar",
+            "8000",
+            "-f",
+            "s16le",
+            "-",
+        ],
+        capture_output=True,
+    )
+    if res.returncode != 0 or len(res.stdout) < 2:
+        return []
+
+    raw = res.stdout[: len(res.stdout) - (len(res.stdout) % 2)]
+    samples = array.array("h")
+    samples.frombytes(raw)
+    if sys.byteorder == "big":
+        samples.byteswap()
+
+    total = len(samples)
+    if total == 0:
+        return []
+
+    count = max(1, min(buckets, total))
+    peaks: list[int] = []
+    for i in range(count):
+        start_idx = (i * total) // count
+        end_idx = ((i + 1) * total) // count
+        if end_idx <= start_idx:
+            end_idx = min(total, start_idx + 1)
+        chunk = samples[start_idx:end_idx]
+        hi = max(chunk)
+        lo = min(chunk)
+        peaks.append(max(abs(hi), abs(lo)))
+
+    max_peak = max(peaks)
+    if max_peak <= 0:
+        return [0.0] * count
+    return [round(p / max_peak, 4) for p in peaks]
 
 
 def _render_pngs(

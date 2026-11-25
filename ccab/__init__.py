@@ -1,3 +1,3 @@
 """CCAB — match, convert, and burn styled captions into videos."""
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"

@@ -75,9 +75,7 @@
       }
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -88,58 +86,56 @@
     }
 
     .app {
-      max-width: 1220px;
+      max-width: 1320px;
       margin: 0 auto;
-      padding: 1.5rem clamp(1rem, 3vw, 2rem) 2.5rem;
+      padding: 1.25rem clamp(1rem, 3vw, 2rem) 2rem;
     }
 
     header {
       display: flex;
       flex-wrap: wrap;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.15rem;
     }
 
     header h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       letter-spacing: -0.02em;
     }
 
     header p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
-      gap: 1.25rem;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: 1.15rem;
       align-items: start;
     }
 
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
     }
 
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 1.15rem;
+      padding: 1.05rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.9rem;
     }
 
     .panel-title {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 650;
     }
 
@@ -149,12 +145,12 @@
       border: 2px dashed var(--border);
       border-radius: 12px;
       background: var(--surface-alt);
-      padding: 1.1rem 1rem;
+      padding: 0.95rem 0.9rem;
       cursor: pointer;
       transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.3rem;
       outline: none;
     }
 
@@ -165,9 +161,7 @@
       background: color-mix(in srgb, var(--accent) 10%, var(--surface-alt));
     }
 
-    .drop-card.is-over {
-      transform: scale(1.01);
-    }
+    .drop-card.is-over { transform: scale(1.01); }
 
     .drop-card.has-file {
       border-style: solid;
@@ -183,13 +177,13 @@
 
     .drop-kind {
       font-weight: 650;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .badge {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      padding: 0.15rem 0.55rem;
+      padding: 0.14rem 0.5rem;
       border-radius: 999px;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -203,12 +197,12 @@
     }
 
     .drop-hint {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--muted);
     }
 
     .drop-meta {
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       font-weight: 550;
       word-break: break-word;
     }
@@ -229,8 +223,8 @@
       appearance: none;
       border: 0;
       border-radius: 10px;
-      padding: 0.78rem 1rem;
-      font-size: 0.95rem;
+      padding: 0.76rem 1rem;
+      font-size: 0.93rem;
       font-weight: 650;
       background: var(--accent);
       color: var(--accent-fg);
@@ -238,25 +232,16 @@
       transition: opacity 0.15s ease, transform 0.1s ease;
     }
 
-    .btn-primary:hover:not(:disabled) {
-      opacity: 0.92;
-    }
-
-    .btn-primary:active:not(:disabled) {
-      transform: translateY(1px);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
+    .btn-primary:hover:not(:disabled) { opacity: 0.92; }
+    .btn-primary:active:not(:disabled) { transform: translateY(1px); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .btn-secondary {
       appearance: none;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.48rem 0.8rem;
-      font-size: 0.85rem;
+      padding: 0.42rem 0.72rem;
+      font-size: 0.82rem;
       font-weight: 600;
       background: var(--surface-alt);
       color: var(--text);
@@ -267,14 +252,8 @@
       gap: 0.35rem;
     }
 
-    .btn-secondary:hover:not(:disabled) {
-      border-color: var(--accent);
-    }
-
-    .btn-secondary:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent); }
+    .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
 
     /* Native Progress Bar per modern-web-guidance/progress */
     progress {
@@ -293,14 +272,10 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      progress {
-        --progress-bar-indeterminate-animation-duration: 10s;
-      }
+      progress { --progress-bar-indeterminate-animation-duration: 10s; }
     }
 
-    progress::-webkit-progress-bar {
-      background: transparent;
-    }
+    progress::-webkit-progress-bar { background: transparent; }
 
     progress::-webkit-progress-value {
       background: var(--accent);
@@ -330,9 +305,9 @@
     }
 
     .status-box {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--muted);
-      min-height: 1.25rem;
+      min-height: 1.2rem;
     }
 
     .status-box.ok { color: var(--success); font-weight: 550; }
@@ -344,7 +319,12 @@
       gap: 0.5rem;
     }
 
-    /* Live Sample Preview */
+    /* Unified Video Player + In-Player Style Icons + Popover + Alignment Timeline */
+    .player-shell {
+      position: relative;
+      width: 100%;
+    }
+
     .preview-stage {
       position: relative;
       width: 100%;
@@ -369,6 +349,7 @@
       height: 100%;
       object-fit: contain;
       background: #000;
+      cursor: pointer;
     }
 
     .preview-exact {
@@ -395,22 +376,131 @@
       white-space: pre-wrap;
       word-break: break-word;
       paint-order: stroke fill;
-      transition: all 0.1s ease;
+      transition: background-color 0.1s ease, border-radius 0.1s ease;
     }
 
-    .preview-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
+    /* In-Player Style Icon Dock (logically ordered: Presets -> Text -> Background -> Layout) */
+    .player-style-dock {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      z-index: 6;
+      display: inline-flex;
       align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem;
+      border-radius: 11px;
+      background: rgb(15 23 42 / 0.72);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgb(255 255 255 / 0.16);
     }
 
-    .preview-toolbar input[type="text"] {
-      flex: 1 1 220px;
-      min-width: 0;
+    .dock-btn {
+      appearance: none;
+      border: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: #f8fafc;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
-    /* Preset Pills */
+    .dock-btn:hover {
+      background: rgb(255 255 255 / 0.16);
+    }
+
+    .dock-btn[aria-expanded="true"] {
+      background: var(--accent);
+      color: var(--accent-fg);
+    }
+
+    .dock-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .player-play-dock {
+      position: absolute;
+      bottom: 0.65rem;
+      left: 0.65rem;
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem;
+      border-radius: 11px;
+      background: rgb(15 23 42 / 0.72);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgb(255 255 255 / 0.16);
+    }
+
+    .dock-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Floating Popover Anchored Under Icon Dock */
+    .style-popover {
+      position: absolute;
+      top: 3.35rem;
+      right: 0.65rem;
+      z-index: 8;
+      width: min(340px, calc(100% - 1.3rem));
+      max-height: min(410px, calc(100% - 4rem));
+      overflow-y: auto;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 14px 36px rgb(0 0 0 / 0.32);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .style-popover[hidden] {
+      display: none;
+    }
+
+    .popover-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .popover-close {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.05rem;
+      line-height: 1;
+      padding: 0.15rem 0.35rem;
+      border-radius: 6px;
+    }
+
+    .popover-close:hover {
+      background: var(--surface-alt);
+      color: var(--text);
+    }
+
     .preset-row {
       display: flex;
       flex-wrap: wrap;
@@ -423,8 +513,8 @@
       background: var(--surface-alt);
       color: var(--text);
       border-radius: 999px;
-      padding: 0.35rem 0.78rem;
-      font-size: 0.84rem;
+      padding: 0.32rem 0.72rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       text-transform: capitalize;
@@ -436,18 +526,21 @@
       border-color: var(--accent);
     }
 
-    /* Controls Grid */
     .controls-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.85rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-      font-size: 0.83rem;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
     }
 
     .field-label {
@@ -466,17 +559,17 @@
     input[type="number"],
     select {
       width: 100%;
-      padding: 0.45rem 0.55rem;
+      padding: 0.42rem 0.5rem;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface-alt);
       color: var(--text);
-      font-size: 0.88rem;
+      font-size: 0.84rem;
     }
 
     input[type="color"] {
       width: 100%;
-      height: 34px;
+      height: 32px;
       padding: 2px;
       border-radius: 8px;
       border: 1px solid var(--border);
@@ -486,26 +579,24 @@
 
     input[type="range"] {
       width: 100%;
-      margin: 0.35rem 0 0;
+      margin: 0.25rem 0 0;
     }
 
     .check-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.1rem;
-      padding-top: 0.2rem;
+      gap: 0.9rem;
     }
 
     .check-label {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      font-size: 0.88rem;
+      gap: 0.42rem;
+      font-size: 0.84rem;
       cursor: pointer;
       position: relative;
     }
 
-    /* Fallback for browsers without accent-color per brand-consistent-forms */
     @supports not (accent-color: auto) {
       .check-label input[type="checkbox"].native-check {
         position: absolute !important;
@@ -519,9 +610,7 @@
         white-space: nowrap !important;
       }
 
-      .check-label {
-        padding-left: 1.65rem;
-      }
+      .check-label { padding-left: 1.6rem; }
 
       .check-label input[type="checkbox"].native-check + span::before {
         content: "";
@@ -552,24 +641,199 @@
         font-weight: 700;
       }
     }
+
+    /* Unified Transport + Timeline Controls Inside Same Card */
+    .timeline-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.55rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 10px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .time-readout {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 0 0.25rem;
+    }
+
+    .zoom-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .zoom-group input[type="range"] {
+      width: 90px;
+      margin: 0;
+    }
+
+    .timeline-scroll {
+      position: relative;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-alt);
+    }
+
+    .timeline-track {
+      position: relative;
+      height: 152px;
+      min-width: 100%;
+      user-select: none;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    #waveform-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .cue-lane {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 88px;
+      bottom: 10px;
+      pointer-events: none;
+    }
+
+    .cue-block {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-radius: 8px;
+      border: 1.5px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      overflow: hidden;
+      cursor: grab;
+      pointer-events: auto;
+      transition: background-color 0.1s ease;
+    }
+
+    .cue-block:active { cursor: grabbing; }
+
+    .cue-block.selected {
+      background: color-mix(in srgb, var(--accent) 36%, var(--surface));
+      box-shadow: 0 0 0 2px var(--accent);
+      z-index: 3;
+    }
+
+    .cue-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+    }
+
+    .cue-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 9px;
+      cursor: ew-resize;
+      z-index: 2;
+    }
+
+    .cue-handle.left { left: 0; }
+    .cue-handle.right { right: 0; }
+
+    .cue-handle::after {
+      content: "";
+      position: absolute;
+      top: 25%;
+      bottom: 25%;
+      left: 3px;
+      width: 2px;
+      border-radius: 2px;
+      background: color-mix(in srgb, var(--accent) 70%, transparent);
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .cue-block:hover .cue-handle::after,
+    .cue-block.selected .cue-handle::after {
+      opacity: 1;
+    }
+
+    .playhead {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0%;
+      width: 2px;
+      background: var(--error);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .playhead::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -5px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid var(--error);
+    }
+
+    .cue-inspector {
+      display: grid;
+      grid-template-columns: 72px 104px 104px minmax(160px, 1fr) auto;
+      gap: 0.6rem;
+      align-items: end;
+      padding: 0.65rem;
+      border-radius: 10px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 720px) {
+      .cue-inspector { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <header>
       <div style="display:flex;align-items:center;gap:0.75rem;">
-        <img src="/icon.svg" alt="CCAB Studio icon" width="40" height="40" style="border-radius:9px;flex-shrink:0;">
+        <img src="/icon.svg" alt="CCAB Studio icon" width="38" height="38" style="border-radius:9px;flex-shrink:0;">
         <div>
           <h1>CCAB Studio</h1>
-          <p>Drop a video and subtitle file, customize the caption look, and burn directly to MP4.</p>
+          <p>Drop a video and subtitle file, align lines to the audio waveform, style inside the player, and burn to MP4.</p>
         </div>
       </div>
     </header>
 
     <div class="layout">
-      <!-- Left Column: Drag & Drop Cards + Burn -->
+      <!-- Left Column: Files & Burn -->
       <section class="panel" aria-label="Files and Export">
-        <h2 class="panel-title">1. Drop Your Files</h2>
+        <h2 class="panel-title">1. Files &amp; Export</h2>
 
         <div id="video-card" class="drop-card" tabindex="0" role="button" aria-label="Drop video file or click to browse">
           <input id="video-input" class="sr-only-input" type="file" accept=".mp4,.mov,.mkv,.webm,.avi,.m4v,video/*">
@@ -604,150 +868,257 @@
         </div>
       </section>
 
-      <!-- Right Column: Live Preview & Style Controls -->
-      <section class="panel" aria-label="Preview and Style Controls">
-        <h2 class="panel-title">2. Sample Preview &amp; Style</h2>
+      <!-- Right Column: Unified Video Player + In-Player Style Icons + Alignment Timeline -->
+      <section class="panel" aria-label="Video Player and Subtitle Alignment">
+        <h2 class="panel-title">2. Video Player, Style &amp; Subtitle Alignment</h2>
 
-        <div id="preview-stage" class="preview-stage">
-          <img id="preview-poster" class="preview-poster" alt="Video frame preview" hidden>
-          <img id="preview-exact" class="preview-exact" alt="Exact burned frame preview" hidden>
-          <div id="preview-caption-wrap" class="preview-caption-wrap">
-            <div id="preview-caption" class="preview-caption">Electricity is normally invisible. But
+        <div class="player-shell">
+          <div id="preview-stage" class="preview-stage">
+            <img id="preview-poster" class="preview-poster" alt="Video frame preview" hidden>
+            <video id="preview-video" class="preview-poster" playsinline preload="auto" hidden></video>
+            <img id="preview-exact" class="preview-exact" alt="Exact burned frame preview" hidden>
+            <div id="preview-caption-wrap" class="preview-caption-wrap">
+              <div id="preview-caption" class="preview-caption">Electricity is normally invisible. But
 what if you could literally see the current</div>
+            </div>
+
+            <!-- In-player Play / Pause triangle/bars icon button -->
+            <div class="player-play-dock">
+              <button id="play-toggle" class="dock-btn" type="button" disabled aria-label="Play" title="Play / Pause (Space)">
+                <svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor;stroke:none;"><polygon points="6,4 20,12 6,20"/></svg>
+                <svg id="pause-icon" viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor;stroke:none;" hidden><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+              </button>
+            </div>
+
+            <!-- Logically ordered in-player customization icons: 1. Presets, 2. Text, 3. Background, 4. Layout & Exact Preview -->
+            <div class="player-style-dock" role="toolbar" aria-label="Subtitle customization">
+              <button class="dock-btn" type="button" data-popover="pop-presets" aria-expanded="false" title="Style Presets">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/><path d="M5 18l.8 1.8L7.6 20.6l-1.8.8L5 23l-.8-1.6L2.4 20.6l1.8-.8L5 18z"/></svg>
+              </button>
+              <button class="dock-btn" type="button" data-popover="pop-text" aria-expanded="false" title="Typography &amp; Text Color">
+                <span>Aa</span>
+              </button>
+              <button class="dock-btn" type="button" data-popover="pop-bg" aria-expanded="false" title="Background Box &amp; Padding">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M7 12h10"/></svg>
+              </button>
+              <button class="dock-btn" type="button" data-popover="pop-layout" aria-expanded="false" title="Position &amp; Exact Frame Preview">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M4 18h16"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Popover 1: Presets -->
+          <div id="pop-presets" class="style-popover" hidden>
+            <div class="popover-head">
+              <span>1. Style Presets</span>
+              <button class="popover-close" type="button" aria-label="Close">&times;</button>
+            </div>
+            <div id="preset-row" class="preset-row"></div>
+          </div>
+
+          <!-- Popover 2: Typography -->
+          <div id="pop-text" class="style-popover" hidden>
+            <div class="popover-head">
+              <span>2. Typography &amp; Color</span>
+              <button class="popover-close" type="button" aria-label="Close">&times;</button>
+            </div>
+            <div class="controls-grid">
+              <label class="field">
+                <span class="field-label">Font Family</span>
+                <select id="ctrl-font">
+                  <option value="system">System UI</option>
+                  <option value="Helvetica Neue">Helvetica Neue</option>
+                  <option value="Avenir Next">Avenir Next</option>
+                  <option value="Arial">Arial</option>
+                  <option value="Georgia">Georgia</option>
+                  <option value="Menlo">Menlo (Monospace)</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Font Weight</span>
+                <select id="ctrl-font-weight">
+                  <option value="regular">Regular</option>
+                  <option value="medium">Medium</option>
+                  <option value="semibold" selected>Semibold</option>
+                  <option value="bold">Bold</option>
+                  <option value="heavy">Heavy</option>
+                </select>
+              </label>
+              <label class="field full">
+                <span class="field-label">Font Size <output id="out-font-size">Auto</output></span>
+                <input id="ctrl-font-size" type="range" min="0" max="64" step="1" value="0">
+              </label>
+              <label class="field">
+                <span class="field-label">Text Color</span>
+                <input id="ctrl-text-color" type="color" value="#ffffff">
+              </label>
+              <label class="field">
+                <span class="field-label">Stroke Color</span>
+                <input id="ctrl-stroke-color" type="color" value="#000000">
+              </label>
+              <label class="field full">
+                <span class="field-label">Outline Width <output id="out-stroke-width">0 px</output></span>
+                <input id="ctrl-stroke-width" type="range" min="0" max="8" step="0.5" value="0">
+              </label>
+            </div>
+            <div class="check-row">
+              <label class="check-label">
+                <input id="ctrl-shadow" class="native-check" type="checkbox" checked>
+                <span>Drop shadow</span>
+              </label>
+              <label class="check-label">
+                <input id="ctrl-uppercase" class="native-check" type="checkbox">
+                <span>UPPERCASE</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Popover 3: Background -->
+          <div id="pop-bg" class="style-popover" hidden>
+            <div class="popover-head">
+              <span>3. Background &amp; Padding</span>
+              <button class="popover-close" type="button" aria-label="Close">&times;</button>
+            </div>
+            <div class="controls-grid">
+              <label class="field">
+                <span class="field-label">Background Style</span>
+                <select id="ctrl-bg-style">
+                  <option value="pill">Pill (Rounded)</option>
+                  <option value="box">Box (Sharp)</option>
+                  <option value="full-bar">Full-Width Bar</option>
+                  <option value="none">None</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Background Color</span>
+                <input id="ctrl-bg-color" type="color" value="#000000">
+              </label>
+              <label class="field">
+                <span class="field-label">Opacity <output id="out-bg-opacity">0.68</output></span>
+                <input id="ctrl-bg-opacity" type="range" min="0" max="1" step="0.02" value="0.68">
+              </label>
+              <label class="field">
+                <span class="field-label">Radius <output id="out-bg-radius">10 px</output></span>
+                <input id="ctrl-bg-radius" type="range" min="0" max="28" step="1" value="10">
+              </label>
+              <label class="field">
+                <span class="field-label">Horiz Pad <output id="out-pad-x">20 px</output></span>
+                <input id="ctrl-pad-x" type="range" min="4" max="48" step="2" value="20">
+              </label>
+              <label class="field">
+                <span class="field-label">Vert Pad <output id="out-pad-y">10 px</output></span>
+                <input id="ctrl-pad-y" type="range" min="2" max="32" step="2" value="10">
+              </label>
+            </div>
+          </div>
+
+          <!-- Popover 4: Position & Exact Engine Preview -->
+          <div id="pop-layout" class="style-popover" hidden>
+            <div class="popover-head">
+              <span>4. Position &amp; Frame Check</span>
+              <button class="popover-close" type="button" aria-label="Close">&times;</button>
+            </div>
+            <div class="controls-grid">
+              <label class="field">
+                <span class="field-label">Position</span>
+                <select id="ctrl-position">
+                  <option value="bottom" selected>Bottom</option>
+                  <option value="center">Center</option>
+                  <option value="top">Top</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">Max Width <output id="out-max-width">84%</output></span>
+                <input id="ctrl-max-width" type="range" min="40" max="96" step="2" value="84">
+              </label>
+              <label class="field full">
+                <span class="field-label">Sample Text (when no cues loaded)</span>
+                <input id="sample-text" type="text" value="Electricity is normally invisible. But what if you could literally see the current" placeholder="Type sample caption text...">
+              </label>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button id="exact-preview-btn" class="btn-secondary" type="button" disabled>Render Exact Frame</button>
+              <button id="live-preview-btn" class="btn-secondary" type="button" hidden>Back to Live Video</button>
+            </div>
           </div>
         </div>
 
-        <div class="preview-toolbar">
-          <input id="sample-text" type="text" value="Electricity is normally invisible. But what if you could literally see the current" aria-label="Sample preview text" placeholder="Type sample caption text...">
-          <button id="exact-preview-btn" class="btn-secondary" type="button" disabled>
-            Render Exact Frame
-          </button>
-          <button id="live-preview-btn" class="btn-secondary" type="button" hidden>
-            Back to Live Preview
-          </button>
+        <!-- Transport & Alignment Toolbar -->
+        <div class="timeline-toolbar">
+          <div class="toolbar-group">
+            <button id="mute-toggle" class="btn-secondary" type="button" disabled>Mute</button>
+            <span id="time-readout" class="time-readout">00:00.00 / 00:00.00</span>
+          </div>
+          <div class="toolbar-group">
+            <label class="zoom-group">
+              <span>Zoom</span>
+              <input id="ctrl-zoom" type="range" min="1" max="10" step="0.5" value="1">
+              <output id="out-zoom">1.0x</output>
+            </label>
+            <label class="check-label">
+              <input id="ctrl-ripple" class="native-check" type="checkbox">
+              <span>Shift following</span>
+            </label>
+            <button class="btn-secondary nudge-btn" type="button" data-delta="-0.5">-0.5s</button>
+            <button class="btn-secondary nudge-btn" type="button" data-delta="-0.1">-0.1s</button>
+            <button class="btn-secondary nudge-btn" type="button" data-delta="0.1">+0.1s</button>
+            <button class="btn-secondary nudge-btn" type="button" data-delta="0.5">+0.5s</button>
+            <button id="export-srt-btn" class="btn-secondary" type="button" disabled>Save .srt</button>
+            <button id="reset-cues-btn" class="btn-secondary" type="button" disabled>Reset</button>
+          </div>
         </div>
 
-        <div>
-          <div class="field-label" style="margin-bottom: 0.45rem;"><span>Presets</span></div>
-          <div id="preset-row" class="preset-row"></div>
+        <!-- Audio Waveform & Subtitle Cue Timeline -->
+        <div id="timeline-scroll" class="timeline-scroll">
+          <div id="timeline-track" class="timeline-track">
+            <canvas id="waveform-canvas"></canvas>
+            <div id="cue-lane" class="cue-lane"></div>
+            <div id="playhead" class="playhead"></div>
+          </div>
         </div>
 
-        <div class="controls-grid">
+        <!-- Selected Cue Inspector -->
+        <div id="cue-inspector" class="cue-inspector">
+          <div class="field">
+            <span class="field-label">Cue</span>
+            <input id="insp-index" type="text" value="—" readonly>
+          </div>
           <label class="field">
-            <span class="field-label">Background Style</span>
-            <select id="ctrl-bg-style">
-              <option value="pill">Pill (Rounded)</option>
-              <option value="box">Box (Sharp)</option>
-              <option value="full-bar">Full-Width Bar</option>
-              <option value="none">None</option>
-            </select>
+            <span class="field-label">Start (s)</span>
+            <input id="insp-start" type="number" step="0.05" min="0" disabled>
           </label>
-
           <label class="field">
-            <span class="field-label">Background Color</span>
-            <input id="ctrl-bg-color" type="color" value="#000000">
+            <span class="field-label">End (s)</span>
+            <input id="insp-end" type="number" step="0.05" min="0.2" disabled>
           </label>
-
           <label class="field">
-            <span class="field-label">Bg Opacity <output id="out-bg-opacity">0.68</output></span>
-            <input id="ctrl-bg-opacity" type="range" min="0" max="1" step="0.02" value="0.68">
+            <span class="field-label">Caption Text</span>
+            <input id="insp-text" type="text" placeholder="Select a cue on the timeline..." disabled>
           </label>
-
-          <label class="field">
-            <span class="field-label">Corner Radius <output id="out-bg-radius">10 px</output></span>
-            <input id="ctrl-bg-radius" type="range" min="0" max="28" step="1" value="10">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Text Color</span>
-            <input id="ctrl-text-color" type="color" value="#ffffff">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Stroke Color</span>
-            <input id="ctrl-stroke-color" type="color" value="#000000">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Stroke Width <output id="out-stroke-width">0 px</output></span>
-            <input id="ctrl-stroke-width" type="range" min="0" max="8" step="0.5" value="0">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Font Family</span>
-            <select id="ctrl-font">
-              <option value="system">System UI</option>
-              <option value="Helvetica Neue">Helvetica Neue</option>
-              <option value="Avenir Next">Avenir Next</option>
-              <option value="Arial">Arial</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Menlo">Menlo (Monospace)</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Font Size <output id="out-font-size">Auto</output></span>
-            <input id="ctrl-font-size" type="range" min="0" max="64" step="1" value="0">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Font Weight</span>
-            <select id="ctrl-font-weight">
-              <option value="regular">Regular</option>
-              <option value="medium">Medium</option>
-              <option value="semibold" selected>Semibold</option>
-              <option value="bold">Bold</option>
-              <option value="heavy">Heavy</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Position</span>
-            <select id="ctrl-position">
-              <option value="bottom" selected>Bottom</option>
-              <option value="center">Center</option>
-              <option value="top">Top</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Max Width <output id="out-max-width">84%</output></span>
-            <input id="ctrl-max-width" type="range" min="40" max="96" step="2" value="84">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Horizontal Pad <output id="out-pad-x">20 px</output></span>
-            <input id="ctrl-pad-x" type="range" min="4" max="48" step="2" value="20">
-          </label>
-
-          <label class="field">
-            <span class="field-label">Vertical Pad <output id="out-pad-y">10 px</output></span>
-            <input id="ctrl-pad-y" type="range" min="2" max="32" step="2" value="10">
-          </label>
-        </div>
-
-        <div class="check-row">
-          <label class="check-label">
-            <input id="ctrl-shadow" class="native-check" type="checkbox" checked>
-            <span>Drop shadow</span>
-          </label>
-          <label class="check-label">
-            <input id="ctrl-uppercase" class="native-check" type="checkbox">
-            <span>UPPERCASE text</span>
-          </label>
+          <button id="jump-cue-btn" class="btn-secondary" type="button" disabled>Jump to Cue</button>
         </div>
       </section>
     </div>
   </div>
 
   <script>
+    const MIN_CUE_DUR = 0.2;
+
     const state = {
       video: null,
+      videoObjectUrl: "",
       subtitle: null,
       presets: {},
       activePreset: "pill",
       videoWidth: 1280,
       videoHeight: 720,
+      duration: 60.0,
+      currentTime: 0.0,
+      cues: [],
+      originalCues: [],
+      waveformPeaks: [],
+      zoom: 1.0,
+      selectedCueIdx: -1,
     };
 
     const $ = (id) => document.getElementById(id);
@@ -769,12 +1140,16 @@ what if you could literally see the current</div>
       dlSrt: $("dl-srt"),
       previewStage: $("preview-stage"),
       previewPoster: $("preview-poster"),
+      previewVideo: $("preview-video"),
       previewExact: $("preview-exact"),
       previewWrap: $("preview-caption-wrap"),
       previewCaption: $("preview-caption"),
       sampleText: $("sample-text"),
       exactPreviewBtn: $("exact-preview-btn"),
       livePreviewBtn: $("live-preview-btn"),
+      playToggle: $("play-toggle"),
+      muteToggle: $("mute-toggle"),
+      timeReadout: $("time-readout"),
       presetRow: $("preset-row"),
       bgStyle: $("ctrl-bg-style"),
       bgColor: $("ctrl-bg-color"),
@@ -792,7 +1167,45 @@ what if you could literally see the current</div>
       padY: $("ctrl-pad-y"),
       shadow: $("ctrl-shadow"),
       uppercase: $("ctrl-uppercase"),
+      zoom: $("ctrl-zoom"),
+      outZoom: $("out-zoom"),
+      ripple: $("ctrl-ripple"),
+      exportSrtBtn: $("export-srt-btn"),
+      resetCuesBtn: $("reset-cues-btn"),
+      timelineScroll: $("timeline-scroll"),
+      timelineTrack: $("timeline-track"),
+      waveformCanvas: $("waveform-canvas"),
+      cueLane: $("cue-lane"),
+      playhead: $("playhead"),
+      inspIndex: $("insp-index"),
+      inspStart: $("insp-start"),
+      inspEnd: $("insp-end"),
+      inspText: $("insp-text"),
+      jumpCueBtn: $("jump-cue-btn"),
     };
+
+    function clamp(v, lo, hi) {
+      return Math.min(hi, Math.max(lo, v));
+    }
+
+    function fmtTime(sec) {
+      const s = Math.max(0, sec || 0);
+      const mins = Math.floor(s / 60);
+      const rem = (s - mins * 60).toFixed(2).padStart(5, "0");
+      return `${String(mins).padStart(2, "0")}:${rem}`;
+    }
+
+    function fmtRulerTime(sec) {
+      const s = Math.max(0, Math.round(sec));
+      const mins = Math.floor(s / 60);
+      const secs = s % 60;
+      return `${mins}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function timelineDuration() {
+      const lastCueEnd = state.cues.length ? state.cues[state.cues.length - 1].end : 0;
+      return Math.max(state.duration || 0, lastCueEnd, 10.0);
+    }
 
     function setStatus(msg, tone = "") {
       els.statusMsg.textContent = msg;
@@ -842,13 +1255,23 @@ what if you could literally see the current</div>
       $("out-pad-x").textContent = `${st.pad_x} px`;
       $("out-pad-y").textContent = `${st.pad_y} px`;
 
-      // Hide exact server PNG whenever controls change so live edits are immediately visible
       if (!els.previewExact.hidden) {
         els.previewExact.hidden = true;
         els.livePreviewBtn.hidden = true;
       }
 
-      const rawText = els.sampleText.value || "Sample caption preview";
+      let rawText = els.sampleText.value || "Sample caption preview";
+      if (state.cues.length > 0 && state.video) {
+        const active = state.cues.find((c) => state.currentTime >= c.start && state.currentTime <= c.end);
+        if (active) {
+          rawText = active.text;
+          els.previewCaption.hidden = false;
+        } else {
+          els.previewCaption.hidden = true;
+        }
+      } else {
+        els.previewCaption.hidden = false;
+      }
       els.previewCaption.textContent = st.uppercase ? rawText.toUpperCase() : rawText;
 
       const baseFontPx = st.font_size > 0 ? st.font_size : Math.max(22, (state.videoHeight || 720) * 0.042);
@@ -869,10 +1292,7 @@ what if you could literally see the current</div>
       if (st.bg_style === "none" || st.bg_opacity <= 0) {
         cap.style.backgroundColor = "transparent";
         cap.style.borderRadius = "0px";
-      } else if (st.bg_style === "full-bar") {
-        cap.style.backgroundColor = hexToRgba(st.bg_color, st.bg_opacity);
-        cap.style.borderRadius = "0px";
-      } else if (st.bg_style === "box") {
+      } else if (st.bg_style === "full-bar" || st.bg_style === "box") {
         cap.style.backgroundColor = hexToRgba(st.bg_color, st.bg_opacity);
         cap.style.borderRadius = "0px";
       } else {
@@ -920,14 +1340,320 @@ what if you could literally see the current</div>
       renderLivePreview();
     }
 
+    function setPlayIcon(playing) {
+      $("play-icon").hidden = playing;
+      $("pause-icon").hidden = !playing;
+      els.playToggle.setAttribute("aria-label", playing ? "Pause" : "Play");
+    }
+
     function updateActionButtons() {
       els.burnBtn.disabled = !(state.video && state.subtitle);
       els.exactPreviewBtn.disabled = !state.video;
+      const hasCues = state.cues.length > 0;
+      els.exportSrtBtn.disabled = !hasCues;
+      els.resetCuesBtn.disabled = !hasCues;
+      for (const btn of document.querySelectorAll(".nudge-btn")) {
+        btn.disabled = !hasCues;
+      }
+      els.playToggle.disabled = !state.video;
+      els.muteToggle.disabled = !state.video;
+    }
+
+    function updateTimeReadout() {
+      const total = timelineDuration();
+      els.timeReadout.textContent = `${fmtTime(state.currentTime)} / ${fmtTime(total)}`;
+      const pct = clamp((state.currentTime / total) * 100, 0, 100);
+      els.playhead.style.left = `${pct}%`;
+    }
+
+    function seekTo(seconds) {
+      const total = timelineDuration();
+      const t = clamp(seconds, 0, total);
+      state.currentTime = t;
+      if (state.video && !els.previewVideo.hidden && Number.isFinite(els.previewVideo.duration)) {
+        els.previewVideo.currentTime = clamp(t, 0, els.previewVideo.duration);
+      }
+      updateTimeReadout();
+      renderLivePreview();
+    }
+
+    function drawWaveform() {
+      const total = timelineDuration();
+      const scrollW = els.timelineScroll.clientWidth || 720;
+      const trackW = Math.max(scrollW, Math.round(scrollW * state.zoom));
+      els.timelineTrack.style.width = `${trackW}px`;
+
+      const canvas = els.waveformCanvas;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssH = els.timelineTrack.clientHeight || 152;
+      const maxCanvasW = 8192;
+      const drawW = Math.min(trackW * dpr, maxCanvasW);
+      canvas.width = drawW;
+      canvas.height = cssH * dpr;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.setTransform(drawW / trackW, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, trackW, cssH);
+
+      const cs = getComputedStyle(document.documentElement);
+      const accent = cs.getPropertyValue("--accent").trim() || "#1d4ed8";
+      const muted = cs.getPropertyValue("--muted").trim() || "#64748b";
+      const border = cs.getPropertyValue("--border").trim() || "#cbd5e1";
+
+      // Time ruler (top 22px)
+      ctx.strokeStyle = border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, 22);
+      ctx.lineTo(trackW, 22);
+      ctx.stroke();
+
+      const pxPerSec = trackW / total;
+      const stepChoices = [0.5, 1, 2, 5, 10, 15, 30, 60];
+      const step = stepChoices.find((s) => s * pxPerSec >= 58) || 60;
+      ctx.fillStyle = muted;
+      ctx.font = "11px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.textBaseline = "top";
+
+      for (let t = 0; t <= total + 0.001; t += step) {
+        const x = t * pxPerSec;
+        ctx.strokeStyle = border;
+        ctx.beginPath();
+        ctx.moveTo(x, 14);
+        ctx.lineTo(x, 22);
+        ctx.stroke();
+        ctx.fillText(fmtRulerTime(t), Math.min(x + 3, trackW - 34), 3);
+      }
+
+      // Waveform center line & bars (y = 24..84)
+      const waveCenterY = 54;
+      const waveMaxHalf = 27;
+      ctx.strokeStyle = border;
+      ctx.beginPath();
+      ctx.moveTo(0, waveCenterY);
+      ctx.lineTo(trackW, waveCenterY);
+      ctx.stroke();
+
+      const peaks = state.waveformPeaks;
+      if (peaks && peaks.length > 0) {
+        const barCount = Math.min(peaks.length, Math.max(120, Math.floor(trackW / 3)));
+        const barStep = trackW / barCount;
+        const barW = Math.max(1.5, barStep * 0.68);
+        ctx.fillStyle = accent;
+        ctx.globalAlpha = 0.72;
+        for (let i = 0; i < barCount; i++) {
+          const pIdx = Math.min(peaks.length - 1, Math.floor((i / barCount) * peaks.length));
+          const amp = Math.max(0.04, peaks[pIdx]);
+          const h = amp * waveMaxHalf;
+          ctx.fillRect(i * barStep, waveCenterY - h, barW, h * 2);
+        }
+        ctx.globalAlpha = 1.0;
+      } else if (state.video) {
+        ctx.fillStyle = muted;
+        ctx.fillText("Extracting audio waveform...", 10, waveCenterY - 6);
+      } else {
+        ctx.fillStyle = muted;
+        ctx.fillText("Drop a video and subtitle file to visualize audio waveforms and align cues", 10, waveCenterY - 6);
+      }
+    }
+
+    function updateInspector() {
+      const idx = state.selectedCueIdx;
+      const cue = idx >= 0 && idx < state.cues.length ? state.cues[idx] : null;
+      if (!cue) {
+        els.inspIndex.value = "—";
+        els.inspStart.value = "";
+        els.inspEnd.value = "";
+        els.inspText.value = "";
+        els.inspStart.disabled = true;
+        els.inspEnd.disabled = true;
+        els.inspText.disabled = true;
+        els.jumpCueBtn.disabled = true;
+        return;
+      }
+      els.inspIndex.value = `#${idx + 1}`;
+      els.inspStart.value = cue.start.toFixed(2);
+      els.inspEnd.value = cue.end.toFixed(2);
+      els.inspText.value = cue.text.replace(/\n/g, " ");
+      els.inspStart.disabled = false;
+      els.inspEnd.disabled = false;
+      els.inspText.disabled = false;
+      els.jumpCueBtn.disabled = false;
+    }
+
+    function renderCueBlocks() {
+      const total = timelineDuration();
+      els.cueLane.innerHTML = "";
+
+      state.cues.forEach((cue, idx) => {
+        const block = document.createElement("div");
+        block.className = "cue-block" + (idx === state.selectedCueIdx ? " selected" : "");
+        block.style.left = `${(cue.start / total) * 100}%`;
+        block.style.width = `${Math.max(0.4, ((cue.end - cue.start) / total) * 100)}%`;
+        block.title = `#${idx + 1} (${cue.start.toFixed(2)}s - ${cue.end.toFixed(2)}s)\n${cue.text}`;
+
+        const leftH = document.createElement("div");
+        leftH.className = "cue-handle left";
+        const rightH = document.createElement("div");
+        rightH.className = "cue-handle right";
+        const label = document.createElement("span");
+        label.className = "cue-label";
+        label.textContent = `#${idx + 1} ${cue.text.replace(/\n/g, " ")}`;
+
+        block.appendChild(leftH);
+        block.appendChild(label);
+        block.appendChild(rightH);
+
+        const startDrag = (mode, e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          state.selectedCueIdx = idx;
+          updateInspector();
+          for (const el of els.cueLane.children) {
+            el.classList.toggle("selected", el === block);
+          }
+
+          const startX = e.clientX;
+          const trackW = els.timelineTrack.clientWidth || 720;
+          const durLimit = timelineDuration();
+          const snapshot = state.cues.map((c) => ({ ...c }));
+          const orig = snapshot[idx];
+          const cueDur = orig.end - orig.start;
+          const prevEnd = idx > 0 ? snapshot[idx - 1].end : 0.0;
+          const nextStart = idx < snapshot.length - 1 ? snapshot[idx + 1].start : durLimit;
+
+          block.setPointerCapture(e.pointerId);
+
+          const onMove = (ev) => {
+            const dt = ((ev.clientX - startX) / trackW) * durLimit;
+
+            if (mode === "move") {
+              if (els.ripple.checked) {
+                const lastOrigEnd = snapshot[snapshot.length - 1].end;
+                const clampedDt = clamp(dt, prevEnd - orig.start, durLimit - lastOrigEnd);
+                for (let j = idx; j < state.cues.length; j++) {
+                  state.cues[j].start = Number((snapshot[j].start + clampedDt).toFixed(3));
+                  state.cues[j].end = Number((snapshot[j].end + clampedDt).toFixed(3));
+                }
+              } else {
+                const newStart = clamp(orig.start + dt, prevEnd, Math.max(prevEnd, nextStart - cueDur));
+                state.cues[idx].start = Number(newStart.toFixed(3));
+                state.cues[idx].end = Number((newStart + cueDur).toFixed(3));
+              }
+            } else if (mode === "left") {
+              state.cues[idx].start = Number(clamp(orig.start + dt, prevEnd, orig.end - MIN_CUE_DUR).toFixed(3));
+            } else if (mode === "right") {
+              state.cues[idx].end = Number(clamp(orig.end + dt, orig.start + MIN_CUE_DUR, nextStart).toFixed(3));
+            }
+
+            const loopEnd = mode === "move" && els.ripple.checked ? state.cues.length - 1 : idx;
+            for (let j = idx; j <= loopEnd; j++) {
+              const el = els.cueLane.children[j];
+              const c = state.cues[j];
+              if (el) {
+                el.style.left = `${(c.start / durLimit) * 100}%`;
+                el.style.width = `${Math.max(0.4, ((c.end - c.start) / durLimit) * 100)}%`;
+              }
+            }
+            updateInspector();
+            renderLivePreview();
+          };
+
+          const onUp = (ev) => {
+            try { block.releasePointerCapture(ev.pointerId); } catch (_) {}
+            block.removeEventListener("pointermove", onMove);
+            block.removeEventListener("pointerup", onUp);
+            block.removeEventListener("pointercancel", onUp);
+            renderCueBlocks();
+          };
+
+          block.addEventListener("pointermove", onMove);
+          block.addEventListener("pointerup", onUp);
+          block.addEventListener("pointercancel", onUp);
+        };
+
+        leftH.addEventListener("pointerdown", (e) => startDrag("left", e));
+        rightH.addEventListener("pointerdown", (e) => startDrag("right", e));
+        block.addEventListener("pointerdown", (e) => startDrag("move", e));
+
+        els.cueLane.appendChild(block);
+      });
+      updateInspector();
+    }
+
+    function renderTimeline() {
+      drawWaveform();
+      renderCueBlocks();
+      updateTimeReadout();
+    }
+
+    async function decodeClientWaveform(file, buckets = 1200) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return [];
+        const ctx = new AudioCtx();
+        const buf = await file.arrayBuffer();
+        const audio = await ctx.decodeAudioData(buf);
+        const chan = audio.getChannelData(0);
+        const count = Math.min(buckets, chan.length);
+        const peaks = new Array(count).fill(0);
+        let globalMax = 0;
+        for (let i = 0; i < count; i++) {
+          const s = Math.floor((i * chan.length) / count);
+          const e = Math.max(s + 1, Math.floor(((i + 1) * chan.length) / count));
+          let m = 0;
+          for (let j = s; j < e; j++) {
+            const v = Math.abs(chan[j]);
+            if (v > m) m = v;
+          }
+          peaks[i] = m;
+          if (m > globalMax) globalMax = m;
+        }
+        await ctx.close().catch(() => {});
+        if (globalMax <= 0) return peaks;
+        return peaks.map((p) => Number((p / globalMax).toFixed(4)));
+      } catch (_) {
+        return [];
+      }
+    }
+
+    async function loadWaveform(url, fallbackFile) {
+      let peaks = [];
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.peaks) && data.peaks.length > 0) {
+            peaks = data.peaks;
+          }
+          if (data.duration && data.duration > 0) {
+            state.duration = data.duration;
+          }
+        }
+      } catch (_) {}
+
+      if (!peaks.length && fallbackFile) {
+        peaks = await decodeClientWaveform(fallbackFile);
+      }
+      state.waveformPeaks = peaks;
+      renderTimeline();
     }
 
     async function uploadFile(file, kind) {
       const isVid = kind === "video";
-      setStatus(`Uploading ${file.name}...`);
+      if (isVid) {
+        if (state.videoObjectUrl) {
+          URL.revokeObjectURL(state.videoObjectUrl);
+        }
+        state.videoObjectUrl = URL.createObjectURL(file);
+        els.previewPoster.hidden = true;
+        els.previewVideo.src = state.videoObjectUrl;
+        els.previewVideo.hidden = false;
+        els.previewVideo.load();
+      }
+
+      setStatus(`Loading ${file.name}...`);
       const res = await fetch("/api/upload", {
         method: "POST",
         headers: {
@@ -940,21 +1666,28 @@ what if you could literally see the current</div>
       if (!res.ok) {
         throw new Error(data.error || "Upload failed");
       }
+
       if (isVid) {
         state.video = data;
         state.videoWidth = data.width;
         state.videoHeight = data.height;
+        state.duration = data.duration || state.duration;
+        state.waveformPeaks = [];
         els.videoCard.classList.add("has-file");
-        els.videoBadge.textContent = `${data.width}x${data.height}`;
+        els.videoBadge.textContent = `${data.width}x${data.height} · ${fmtRulerTime(data.duration || 0)}`;
         els.videoBadge.classList.add("accent");
         els.videoMeta.textContent = data.filename;
         els.videoMeta.className = "drop-meta";
-        if (data.poster_url) {
-          els.previewPoster.src = data.poster_url + `?t=${Date.now()}`;
-          els.previewPoster.hidden = false;
-        }
+        setPlayIcon(false);
+        loadWaveform(data.waveform_url || "", file);
       } else {
         state.subtitle = data;
+        state.cues = Array.isArray(data.cues)
+          ? data.cues.map((c) => ({ start: Number(c.start), end: Number(c.end), text: String(c.text) }))
+          : [];
+        state.originalCues = state.cues.map((c) => ({ ...c }));
+        state.selectedCueIdx = state.cues.length > 0 ? 0 : -1;
+
         els.subtitleCard.classList.add("has-file");
         els.subtitleBadge.textContent = data.needs_convert
           ? `${data.ext} → .srt (${data.cue_count} cues)`
@@ -967,6 +1700,7 @@ what if you could literally see the current</div>
         }
       }
       updateActionButtons();
+      renderTimeline();
       renderLivePreview();
       setStatus(`Loaded ${data.filename}.`, "ok");
     }
@@ -1012,6 +1746,43 @@ what if you could literally see the current</div>
       });
     }
 
+    // In-player customization popovers
+    function closeAllPopovers() {
+      for (const pop of document.querySelectorAll(".style-popover")) {
+        pop.hidden = true;
+      }
+      for (const btn of document.querySelectorAll(".dock-btn")) {
+        btn.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    for (const btn of document.querySelectorAll(".dock-btn")) {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const targetId = btn.dataset.popover;
+        const target = $(targetId);
+        const isOpen = !target.hidden;
+        closeAllPopovers();
+        if (!isOpen) {
+          target.hidden = false;
+          btn.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
+
+    for (const btn of document.querySelectorAll(".popover-close")) {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeAllPopovers();
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".style-popover") && !e.target.closest(".player-style-dock")) {
+        closeAllPopovers();
+      }
+    });
+
     els.exactPreviewBtn.addEventListener("click", async () => {
       if (!state.video) return;
       els.exactPreviewBtn.disabled = true;
@@ -1024,7 +1795,8 @@ what if you could literally see the current</div>
             video_id: state.video.id,
             subtitle_id: state.subtitle ? state.subtitle.id : "",
             sample_text: els.sampleText.value,
-            timestamp: 5.0,
+            timestamp: state.currentTime || 5.0,
+            cues: state.cues,
             style: currentStyle(),
           }),
         });
@@ -1064,6 +1836,7 @@ what if you could literally see the current</div>
           body: JSON.stringify({
             video_id: state.video.id,
             subtitle_id: state.subtitle.id,
+            cues: state.cues,
             style: currentStyle(),
           }),
         });
@@ -1112,7 +1885,190 @@ what if you could literally see the current</div>
         $(id).addEventListener("input", renderLivePreview);
         $(id).addEventListener("change", renderLivePreview);
       }
-      window.addEventListener("resize", renderLivePreview);
+
+      window.addEventListener("resize", () => {
+        renderLivePreview();
+        drawWaveform();
+      });
+
+      // Video playback & scrubbing synchronization
+      let rafId = 0;
+      const tickVideo = () => {
+        if (!els.previewVideo.paused && !els.previewVideo.ended) {
+          state.currentTime = els.previewVideo.currentTime || 0;
+          updateTimeReadout();
+          renderLivePreview();
+          rafId = requestAnimationFrame(tickVideo);
+        }
+      };
+
+      els.previewVideo.addEventListener("loadedmetadata", () => {
+        if (Number.isFinite(els.previewVideo.duration) && els.previewVideo.duration > 0) {
+          state.duration = els.previewVideo.duration;
+          renderTimeline();
+        }
+      });
+      els.previewVideo.addEventListener("error", () => {
+        if (state.video?.video_url && els.previewVideo.src !== new URL(state.video.video_url, location.origin).href) {
+          els.previewVideo.src = state.video.video_url;
+        }
+      });
+      els.previewVideo.addEventListener("play", () => {
+        setPlayIcon(true);
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(tickVideo);
+      });
+      els.previewVideo.addEventListener("pause", () => {
+        setPlayIcon(false);
+        cancelAnimationFrame(rafId);
+      });
+      els.previewVideo.addEventListener("ended", () => {
+        setPlayIcon(false);
+        cancelAnimationFrame(rafId);
+      });
+      els.previewVideo.addEventListener("timeupdate", () => {
+        if (els.previewVideo.paused) {
+          state.currentTime = els.previewVideo.currentTime || 0;
+          updateTimeReadout();
+          renderLivePreview();
+        }
+      });
+
+      const togglePlay = () => {
+        if (!state.video || els.previewVideo.hidden) return;
+        if (els.previewVideo.paused) {
+          els.previewVideo.play().catch((err) => setStatus(`Playback failed: ${err.message}`, "err"));
+        } else {
+          els.previewVideo.pause();
+        }
+      };
+
+      els.previewVideo.addEventListener("click", togglePlay);
+      els.playToggle.addEventListener("click", togglePlay);
+      els.muteToggle.addEventListener("click", () => {
+        els.previewVideo.muted = !els.previewVideo.muted;
+        els.muteToggle.textContent = els.previewVideo.muted ? "Unmute" : "Mute";
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeAllPopovers();
+        } else if (e.code === "Space" && !["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(document.activeElement?.tagName)) {
+          e.preventDefault();
+          togglePlay();
+        }
+      });
+
+      els.timelineTrack.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".cue-block")) return;
+        const scrub = (ev) => {
+          const rect = els.timelineTrack.getBoundingClientRect();
+          const frac = clamp((ev.clientX - rect.left) / Math.max(1, rect.width), 0, 1);
+          seekTo(frac * timelineDuration());
+        };
+        scrub(e);
+        els.timelineTrack.setPointerCapture(e.pointerId);
+        const onMove = (ev) => scrub(ev);
+        const onUp = (ev) => {
+          try { els.timelineTrack.releasePointerCapture(ev.pointerId); } catch (_) {}
+          els.timelineTrack.removeEventListener("pointermove", onMove);
+          els.timelineTrack.removeEventListener("pointerup", onUp);
+        };
+        els.timelineTrack.addEventListener("pointermove", onMove);
+        els.timelineTrack.addEventListener("pointerup", onUp);
+      });
+
+      els.zoom.addEventListener("input", () => {
+        state.zoom = parseFloat(els.zoom.value) || 1.0;
+        els.outZoom.textContent = `${state.zoom.toFixed(1)}x`;
+        drawWaveform();
+      });
+
+      for (const btn of document.querySelectorAll(".nudge-btn")) {
+        btn.addEventListener("click", () => {
+          if (!state.cues.length) return;
+          const delta = parseFloat(btn.dataset.delta || "0");
+          const durLimit = timelineDuration();
+          const clamped = clamp(delta, -state.cues[0].start, durLimit - state.cues[state.cues.length - 1].end);
+          for (const c of state.cues) {
+            c.start = Number((c.start + clamped).toFixed(3));
+            c.end = Number((c.end + clamped).toFixed(3));
+          }
+          renderCueBlocks();
+          renderLivePreview();
+          setStatus(`Shifted all cues by ${clamped >= 0 ? "+" : ""}${clamped.toFixed(2)}s.`, "ok");
+        });
+      }
+
+      els.resetCuesBtn.addEventListener("click", () => {
+        if (!state.originalCues.length) return;
+        state.cues = state.originalCues.map((c) => ({ ...c }));
+        state.selectedCueIdx = state.cues.length ? 0 : -1;
+        renderTimeline();
+        renderLivePreview();
+        setStatus("Reset subtitle alignment to original timestamps.", "ok");
+      });
+
+      els.exportSrtBtn.addEventListener("click", async () => {
+        if (!state.cues.length) return;
+        try {
+          const filename = state.video ? state.video.filename : (state.subtitle?.filename || "aligned.srt");
+          const res = await fetch("/api/export-srt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cues: state.cues, filename }),
+          });
+          if (!res.ok) throw new Error("Export failed");
+          const blob = await res.blob();
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          const stem = filename.replace(/\.[^.]+$/, "") || "aligned";
+          a.download = `${stem}.srt`;
+          a.click();
+          setStatus(`Downloaded aligned ${stem}.srt.`, "ok");
+        } catch (err) {
+          setStatus(err.message, "err");
+        }
+      });
+
+      els.inspStart.addEventListener("change", () => {
+        const idx = state.selectedCueIdx;
+        if (idx < 0 || idx >= state.cues.length) return;
+        const prevEnd = idx > 0 ? state.cues[idx - 1].end : 0;
+        const val = parseFloat(els.inspStart.value);
+        if (!Number.isFinite(val)) return;
+        state.cues[idx].start = Number(clamp(val, prevEnd, state.cues[idx].end - MIN_CUE_DUR).toFixed(3));
+        renderCueBlocks();
+        renderLivePreview();
+      });
+
+      els.inspEnd.addEventListener("change", () => {
+        const idx = state.selectedCueIdx;
+        if (idx < 0 || idx >= state.cues.length) return;
+        const nextStart = idx < state.cues.length - 1 ? state.cues[idx + 1].start : timelineDuration();
+        const val = parseFloat(els.inspEnd.value);
+        if (!Number.isFinite(val)) return;
+        state.cues[idx].end = Number(clamp(val, state.cues[idx].start + MIN_CUE_DUR, nextStart).toFixed(3));
+        renderCueBlocks();
+        renderLivePreview();
+      });
+
+      els.inspText.addEventListener("input", () => {
+        const idx = state.selectedCueIdx;
+        if (idx < 0 || idx >= state.cues.length) return;
+        state.cues[idx].text = els.inspText.value;
+        const el = els.cueLane.children[idx]?.querySelector(".cue-label");
+        if (el) el.textContent = `#${idx + 1} ${els.inspText.value}`;
+        renderLivePreview();
+      });
+
+      els.jumpCueBtn.addEventListener("click", () => {
+        const idx = state.selectedCueIdx;
+        if (idx < 0 || idx >= state.cues.length) return;
+        seekTo(state.cues[idx].start + 0.02);
+      });
+
+      renderTimeline();
 
       const res = await fetch("/api/presets");
       const data = await res.json();

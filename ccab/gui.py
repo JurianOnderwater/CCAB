@@ -23,14 +23,15 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from ccab.captions import CAPTION_EXTS, VIDEO_EXTS, parse_srt, sbv_to_srt, vtt_to_srt
+from ccab.captions import CAPTION_EXTS, VIDEO_EXTS, parse_srt, sbv_to_srt, vtt_to_srt, write_srt
 from ccab.deps import ensure_deps
 from ccab.render import (
     PRESETS,
     CaptionStyle,
     build_style,
     burn_video,
-    probe_video_dimensions,
+    extract_waveform_peaks,
+    probe_video_metadata,
     render_preview_frame,
 )
 
@@ -128,6 +129,24 @@ def _style_from_payload(payload: dict[str, object]) -> CaptionStyle:
     return build_style(preset, overrides)
 
 
+def _parse_cues_payload(raw_cues: object) -> list[tuple[float, float, str]] | None:
+    """Validate an optional JSON cues array from the timeline editor."""
+    if not isinstance(raw_cues, list) or not raw_cues:
+        return None
+    parsed: list[tuple[float, float, str]] = []
+    for item in raw_cues:
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get("text") or "").strip()
+        if not text:
+            continue
+        start = max(0.0, float(item.get("start") or 0.0))
+        end = max(start + 0.05, float(item.get("end") or (start + 0.5)))
+        parsed.append((start, end, text))
+    parsed.sort(key=lambda c: (c[0], c[1]))
+    return parsed or None
+
+
 def _make_handler(state: GuiState):
     class CcabGuiHandler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
@@ -161,6 +180,57 @@ def _make_handler(state: GuiState):
             if not raw:
                 return {}
             return json.loads(raw.decode("utf-8"))
+
+        def _serve_range_file(self, target: Path, content_type: str) -> None:
+            size = target.stat().st_size
+            range_header = self.headers.get("Range")
+            start = 0
+            end = size - 1
+            status = HTTPStatus.OK
+
+            if range_header and range_header.startswith("bytes="):
+                spec = range_header.removeprefix("bytes=").split(",")[0].strip()
+                m = re.fullmatch(r"(\d*)-(\d*)", spec)
+                if m:
+                    s_str, e_str = m.group(1), m.group(2)
+                    if s_str and e_str:
+                        start = int(s_str)
+                        end = min(int(e_str), size - 1)
+                    elif s_str:
+                        start = int(s_str)
+                    elif e_str:
+                        suffix = int(e_str)
+                        start = max(0, size - suffix)
+                    if start >= size or start > end:
+                        self.send_response(HTTPStatus.REQUESTED_RANGE_NOT_SATISFIABLE)
+                        self.send_header("Content-Range", f"bytes */{size}")
+                        self.send_header("Content-Length", "0")
+                        self.end_headers()
+                        return
+                    status = HTTPStatus.PARTIAL_CONTENT
+
+            length = end - start + 1
+            self.send_response(status)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(length))
+            if status == HTTPStatus.PARTIAL_CONTENT:
+                self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+
+            try:
+                with target.open("rb") as fh:
+                    fh.seek(start)
+                    remaining = length
+                    while remaining > 0:
+                        chunk = fh.read(min(65536, remaining))
+                        if not chunk:
+                            break
+                        self.wfile.write(chunk)
+                        remaining -= len(chunk)
+            except (BrokenPipeError, ConnectionResetError):
+                return
 
         def do_GET(self) -> None:  # noqa: N802
             parsed = urllib.parse.urlparse(self.path)
@@ -206,6 +276,39 @@ def _make_handler(state: GuiState):
                     self._send_json(HTTPStatus.NOT_FOUND, {"error": "Poster not found"})
                     return
                 self._send_bytes(HTTPStatus.OK, "image/jpeg", poster.read_bytes())
+                return
+
+            if path.startswith("/api/video/"):
+                vid_id = path.removeprefix("/api/video/").strip("/")
+                with state.lock:
+                    entry = state.uploads.get(vid_id)
+                video_path = entry.get("path") if (entry and entry.get("kind") == "video") else None
+                if not isinstance(video_path, Path) or not video_path.is_file():
+                    self._send_json(HTTPStatus.NOT_FOUND, {"error": "Video not found"})
+                    return
+                ctype = mimetypes.guess_type(video_path.name)[0] or "video/mp4"
+                self._serve_range_file(video_path, ctype)
+                return
+
+            if path.startswith("/api/waveform/"):
+                vid_id = path.removeprefix("/api/waveform/").strip("/")
+                with state.lock:
+                    entry = state.uploads.get(vid_id)
+                if not entry or entry.get("kind") != "video":
+                    self._send_json(HTTPStatus.NOT_FOUND, {"error": "Video not found"})
+                    return
+                peaks = entry.get("waveform")
+                if peaks is None:
+                    peaks = extract_waveform_peaks(entry["path"])  # type: ignore[arg-type]
+                    with state.lock:
+                        entry["waveform"] = peaks
+                self._send_json(
+                    HTTPStatus.OK,
+                    {
+                        "duration": float(entry.get("duration") or 0.0),
+                        "peaks": peaks,
+                    },
+                )
                 return
 
             if path.startswith("/api/job/"):
@@ -259,6 +362,8 @@ def _make_handler(state: GuiState):
                     self._handle_preview()
                 elif path == "/api/burn":
                     self._handle_burn()
+                elif path == "/api/export-srt":
+                    self._handle_export_srt()
                 else:
                     self._send_json(HTTPStatus.NOT_FOUND, {"error": "Not found"})
             except Exception as exc:
@@ -316,6 +421,10 @@ def _make_handler(state: GuiState):
                         "needs_convert": ext != ".srt",
                         "cue_count": len(cues),
                         "sample_text": sample_text,
+                        "cues": [
+                            {"start": round(s, 3), "end": round(e, 3), "text": t}
+                            for s, e, t in cues
+                        ],
                     },
                 )
                 return
@@ -328,7 +437,7 @@ def _make_handler(state: GuiState):
                 return
 
             ensure_deps(auto_install=True)
-            width, height = probe_video_dimensions(dest)
+            width, height, duration = probe_video_metadata(dest)
             poster_path = state.tmp_dir / f"{uid}_poster.jpg"
             has_poster = _extract_poster(dest, poster_path)
 
@@ -341,7 +450,9 @@ def _make_handler(state: GuiState):
                     "path": dest,
                     "width": width,
                     "height": height,
+                    "duration": duration,
                     "poster": poster_path if has_poster else None,
+                    "waveform": None,
                 }
             self._send_json(
                 HTTPStatus.OK,
@@ -352,7 +463,10 @@ def _make_handler(state: GuiState):
                     "ext": ext,
                     "width": width,
                     "height": height,
+                    "duration": round(duration, 3),
                     "poster_url": f"/api/poster/{uid}" if has_poster else None,
+                    "video_url": f"/api/video/{uid}",
+                    "waveform_url": f"/api/waveform/{uid}",
                 },
             )
 
@@ -373,7 +487,8 @@ def _make_handler(state: GuiState):
                 return
 
             deps = ensure_deps(auto_install=True)
-            cues = sub.get("cues") if (sub and sub.get("kind") == "subtitle") else None
+            edited_cues = _parse_cues_payload(payload.get("cues"))
+            cues = edited_cues or (sub.get("cues") if (sub and sub.get("kind") == "subtitle") else None)
             if not isinstance(cues, list) or not cues:
                 cues = [(0.0, 9999.0, sample_text)]
 
@@ -388,12 +503,31 @@ def _make_handler(state: GuiState):
             )
             self._send_bytes(HTTPStatus.OK, "image/png", preview_png.read_bytes())
 
+        def _handle_export_srt(self) -> None:
+            payload = self._read_json()
+            cues = _parse_cues_payload(payload.get("cues"))
+            if not cues:
+                self._send_json(HTTPStatus.BAD_REQUEST, {"error": "No valid cues to export."})
+                return
+            raw_name = str(payload.get("filename") or "aligned.srt")
+            stem = Path(_safe_filename(raw_name)).stem or "aligned"
+            tmp_srt = state.tmp_dir / f"export_{uuid.uuid4().hex[:8]}.srt"
+            write_srt(cues, tmp_srt)
+            data = tmp_srt.read_bytes()
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", "application/x-subrip; charset=utf-8")
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Content-Disposition", f'attachment; filename="{stem}.srt"')
+            self.end_headers()
+            self.wfile.write(data)
+
         def _handle_burn(self) -> None:
             payload = self._read_json()
             video_id = str(payload.get("video_id") or "")
             subtitle_id = str(payload.get("subtitle_id") or "")
             style = _style_from_payload(dict(payload.get("style") or {}))
             out_dir_raw = str(payload.get("output_dir") or "").strip()
+            edited_cues = _parse_cues_payload(payload.get("cues"))
 
             with state.lock:
                 vid = state.uploads.get(video_id)
@@ -428,8 +562,14 @@ def _make_handler(state: GuiState):
             def _worker() -> None:
                 try:
                     deps = ensure_deps(auto_install=True)
-                    shutil.copy2(sub["srt_path"], output_srt)  # type: ignore[arg-type]
-                    cues = sub["cues"]
+                    cues = edited_cues or sub["cues"]
+                    if edited_cues:
+                        write_srt(edited_cues, output_srt)
+                        with state.lock:
+                            sub["cues"] = edited_cues
+                            write_srt(edited_cues, sub["srt_path"])  # type: ignore[arg-type]
+                    else:
+                        shutil.copy2(sub["srt_path"], output_srt)  # type: ignore[arg-type]
                     with state.lock:
                         state.jobs[job_id]["message"] = f"Burning {len(cues)} cues into {output_video.name}..."  # type: ignore[arg-type]
                     burn_video(
