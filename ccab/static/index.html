@@ -564,7 +564,6 @@
           <p>Drop a video and subtitle file, customize the caption look, and burn directly to MP4.</p>
         </div>
       </div>
-      <button id="install-app" class="btn-secondary" type="button" hidden>Install App</button>
     </header>
 
     <div class="layout">
@@ -1133,58 +1132,6 @@ what if you could literally see the current</div>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
     }
-
-    const installButton = $("install-app");
-    const supportsWebInstall = typeof Navigator.prototype.install === "function";
-    let deferredInstallPrompt;
-
-    if (supportsWebInstall) {
-      installButton.hidden = false;
-    }
-
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      deferredInstallPrompt = event;
-      if (!supportsWebInstall) {
-        installButton.hidden = false;
-      }
-    });
-
-    installButton.addEventListener("click", async () => {
-      if (installButton.getAttribute("aria-disabled") === "true") {
-        return;
-      }
-      installButton.setAttribute("aria-disabled", "true");
-
-      try {
-        if (supportsWebInstall) {
-          await navigator.install();
-          setStatus("CCAB Studio was installed or opened.", "ok");
-          installButton.hidden = true;
-        } else if (deferredInstallPrompt) {
-          const promptEvent = deferredInstallPrompt;
-          deferredInstallPrompt = undefined;
-          await promptEvent.prompt();
-          const { outcome } = await promptEvent.userChoice;
-          setStatus(
-            outcome === "accepted" ? "CCAB Studio installed." : "Installation canceled.",
-            outcome === "accepted" ? "ok" : ""
-          );
-          if (!deferredInstallPrompt) {
-            installButton.hidden = true;
-          }
-        }
-      } catch (error) {
-        if (error.name === "AbortError") {
-          setStatus("Installation was canceled or could not complete.");
-        } else {
-          setStatus("Installation could not start.", "err");
-          console.error(error);
-        }
-      } finally {
-        installButton.removeAttribute("aria-disabled");
-      }
-    });
 
     init();
   </script>

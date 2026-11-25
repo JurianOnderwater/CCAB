@@ -4,6 +4,22 @@ Match caption files in `Captions/` to videos of the same filename in `Video/`, c
 
 ## Installation
 
+### Option 1: Download Standalone App (No Python / Xcode / Homebrew Required)
+
+Download the prebuilt archive or executable for your OS from **GitHub Releases**:
+- **macOS**: `CCAB-Studio-macos-arm64.zip` — unzip and drag `CCAB-Studio.app` to Applications. *(For unsigned builds on macOS, right-click → **Open** the first time.)*
+- **Windows**: `CCAB-Studio-windows-x64.exe`
+- **Linux**: `ccab-studio-linux-x64`
+
+Double-click to launch **CCAB Studio** in your browser, or pass CLI flags directly.
+
+To publish a new GitHub Release automatically:
+```sh
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+### Option 2: Install CLI & Source Locally
+
 Run the installer script (automatically installs `ffmpeg`, `Pillow` on non-macOS, and registers the `ccab` CLI globally):
 
 ```sh

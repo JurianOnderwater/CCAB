@@ -34,7 +34,12 @@ from ccab.render import (
     render_preview_frame,
 )
 
-STATIC_DIR = Path(__file__).resolve().parent / "static"
+_MEIPASS = getattr(sys, "_MEIPASS", None)
+STATIC_DIR = (
+    (Path(_MEIPASS) / "ccab" / "static")
+    if _MEIPASS
+    else (Path(__file__).resolve().parent / "static")
+)
 STATIC_HTML = STATIC_DIR / "index.html"
 STATIC_ASSETS: dict[str, tuple[str, str]] = {
     "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
